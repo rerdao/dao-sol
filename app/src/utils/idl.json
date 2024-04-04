@@ -1,0 +1,360 @@
+{
+  "version": "0.1.0",
+  "name": "solana_dao",
+  "constants": [
+    {
+      "name": "USER_TAG",
+      "type": "bytes",
+      "value": "[85, 83, 69, 82, 95, 83, 84, 65, 84, 69]"
+    },
+    {
+      "name": "VOTE_TAG",
+      "type": "bytes",
+      "value": "[86, 79, 84, 69, 95, 83, 84, 65, 84, 69]"
+    },
+    {
+      "name": "FEATURE_TAG",
+      "type": "bytes",
+      "value": "[70, 69, 65, 84, 85, 82, 69, 95, 83, 84, 65, 84, 69]"
+    },
+    {
+      "name": "COMPANY_TAG",
+      "type": "bytes",
+      "value": "[67, 79, 77, 80, 65, 78, 89, 95, 83, 84, 65, 84, 69]"
+    },
+    {
+      "name": "MEMBER_TAG",
+      "type": "bytes",
+      "value": "[77, 69, 77, 66, 69, 82, 95, 83, 84, 65, 84, 69]"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "userProfile",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "addFeatures",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "companyList",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "featureList",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "content",
+          "type": "string"
+        },
+        {
+          "name": "companyPubkey",
+          "type": "publicKey"
+        },
+        {
+          "name": "votePeriod",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "addVoting",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "votingList",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "featureIdx",
+          "type": "u8"
+        },
+        {
+          "name": "companyPubkey",
+          "type": "publicKey"
+        },
+        {
+          "name": "vote",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "addCompany",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "companyList",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "companyName",
+          "type": "string"
+        },
+        {
+          "name": "about",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "addMember",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "memberList",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "companyPubkey",
+          "type": "publicKey"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "UserProfile",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "FeatureList",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "companyPubkey",
+            "type": "publicKey"
+          },
+          {
+            "name": "content",
+            "type": "string"
+          },
+          {
+            "name": "idx",
+            "type": "u8"
+          },
+          {
+            "name": "companyIdx",
+            "type": "u8"
+          },
+          {
+            "name": "voteComplete",
+            "type": "bool"
+          },
+          {
+            "name": "votePeriod",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VoteList",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "companyPubkey",
+            "type": "publicKey"
+          },
+          {
+            "name": "voteCount",
+            "type": "u8"
+          },
+          {
+            "name": "idx",
+            "type": "u8"
+          },
+          {
+            "name": "voteCheck",
+            "type": "bool"
+          },
+          {
+            "name": "featureIdx",
+            "type": "u8"
+          },
+          {
+            "name": "vote",
+            "type": {
+              "defined": "VoteType"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CompanyList",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "companyName",
+            "type": "string"
+          },
+          {
+            "name": "companyImageUrl",
+            "type": "string"
+          },
+          {
+            "name": "about",
+            "type": "string"
+          },
+          {
+            "name": "lastFeat",
+            "type": "u8"
+          },
+          {
+            "name": "featCount",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MemberList",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "companyPubkey",
+            "type": "publicKey"
+          },
+          {
+            "name": "memberCount",
+            "type": "u8"
+          },
+          {
+            "name": "idx",
+            "type": "u8"
+          },
+          {
+            "name": "joined",
+            "type": "bool"
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "VoteType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "For"
+          },
+          {
+            "name": "Against"
+          },
+          {
+            "name": "Abstain"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "NotVotingOption",
+      "msg": "Not a voting option"
+    }
+  ],
+  "metadata": {
+    "address": "32rHXkV1bV2yqszKCtaGSGskBrqoyLsaPby96DxkVqjz"
+  }
+}
